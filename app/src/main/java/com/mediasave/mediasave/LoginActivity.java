@@ -34,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
                 System.out.println("loading URL: " + url);
                 if (url.contains("access_token")) {
                     //TODO
+                    //the changes must be done
                     return false;
                 } else
                     return super.shouldOverrideUrlLoading(view, url);
