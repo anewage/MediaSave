@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">MediaSave</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="database_name">UsersDatabase</string>
+    <string name="table_name">TabViewUsers</string>
+    <string name="multi_user_count">MultiUsersCount</string>
+    <string name="authenticated_user_data">AuthenticatedUserData</string>
+
+    <string name="client_id">bbb73e40c83241a2841579ccabd90d30</string>
+    <string name="redirect_uri">http://ceit.aut.ac.ir/~9331009</string>
+
+    <string name="title_activity_feed">FeedActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_multi_user">MultiUserActivity</string>
+
+</resources>
