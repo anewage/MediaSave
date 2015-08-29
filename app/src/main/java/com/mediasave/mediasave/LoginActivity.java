@@ -2,11 +2,14 @@ package com.mediasave.mediasave;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+
+import java.util.StringTokenizer;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -33,13 +36,15 @@ public class LoginActivity extends AppCompatActivity {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 System.out.println("loading URL: " + url);
                 if (url.contains("access_token")) {
-                    //TODO
-                    //the changes must be done
+
+                    //getting the access_token out of the url
+                    String [] temp = url.split("[ = ]+");
+                    access_token = temp[1];
+
                     return false;
                 } else
                     return super.shouldOverrideUrlLoading(view, url);
             }
-
 
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 Toast.makeText(LoginActivity.this, description + " " +  errorCode, Toast.LENGTH_SHORT).show();
