@@ -44,7 +44,7 @@ public class DatabaseManager {
 
         if (c.getCount() != 0){
             //getting the data of user(s)
-            while(c.moveToNext()){
+            while(c.moveToNext()) {
                 String[] userData = new String[3];
                 for (int i = 0; i<3; i++){
                     userData[i] = c.getString(i);
