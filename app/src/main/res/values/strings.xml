@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">MediaSave</string>
 
-    <string name="hello_world">Hello world!</string>
+    <string name="hello_world">Hello World!</string>
+    <string name="request_access">You didn\'t give access to this app!</string>
+    <string name="request_access2">Please Authorize this app in order to proceed.</string>
+    <string name="request_access3">Go back to the login page</string>
     <string name="action_settings">Settings</string>
 
     <string name="database_name">UsersDatabase</string>
@@ -16,5 +19,6 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_multi_user">MultiUserActivity</string>
+    <string name="title_activity_permission_required">PermissionRequiredActivity</string>
 
 </resources>

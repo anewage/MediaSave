@@ -27,8 +27,6 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         //here goes my code!
-        init();
-
         //Splash Screen
         Thread goToNextActivity = new Thread() {
             @Override
@@ -39,9 +37,9 @@ public class WelcomeActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } finally {
                     //TODO go to next activity
-                    finish();
+//                    finish();
+                    init();
                 }
-
 
             }
         };
@@ -118,9 +116,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     break;
             }
         }
-
-        //close the current activity
-//        finish();
+        finish();
     }
 
 }
