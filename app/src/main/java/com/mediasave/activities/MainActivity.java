@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ProgressBar;
 
 import com.mediasave.networking.InstagramEndPointClient;
 import com.mediasave.networking.ResponseHandler;
@@ -61,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         if (isNetworkAvailable()) {
             client.getFeed(null, handler);
         } else {
-
+            // TODO: 8/31/2015
         }
     }
 

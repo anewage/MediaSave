@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mediasave.databasetools.DatabaseManager;
 import com.mediasave.networking.InstagramEndPointClient;
-import com.mediasave.networking.ResponseHandler;
 
 import org.apache.http.Header;
 import org.json.JSONException;
@@ -57,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
                     //ok, let's get the basic information of user
                     client.getUserBasicInfo(access_token, new JsonHttpResponseHandler() {
                         @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        public void onSuccess(int statusCode, @SuppressWarnings("deprecation") Header[] headers, JSONObject response) {
                             //and now let's save the data!
                             String [] userData = decodeDataAndSaveThisUserInDatabase(access_token, response);
 
@@ -69,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        public void onFailure(int statusCode, @SuppressWarnings("deprecation") Header[] headers, Throwable throwable, JSONObject errorResponse) {
                             System.out.println("failed: "+ errorResponse.toString());
                         }
 

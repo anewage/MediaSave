@@ -35,7 +35,8 @@ public class MultiUserActivity extends AppCompatActivity {
         each circle shape must have an OnClickListener or something in order to start MainActivity
         with the selected user's
          */
-        //TODO
+
+        // TODO: 8/31/2015 : the main part of the programming
     }
 
     @Override

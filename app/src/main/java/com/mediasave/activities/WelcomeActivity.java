@@ -1,8 +1,6 @@
 package com.mediasave.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -33,6 +31,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
 
         //here goes my code!
+
         //Splash Screen
         Thread goToNextActivity = new Thread() {
             @Override
@@ -42,7 +41,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
-                    //TODO go to next activity
                     init();
                 }
 

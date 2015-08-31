@@ -4,9 +4,6 @@ package com.mediasave.databasetools;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-
-import com.mediasave.activities.R;
-
 import java.util.Vector;
 
 /**
@@ -64,6 +61,8 @@ public class DatabaseManager {
             }
         }
 
+        c.close();
+
         return results;
     }
 
@@ -87,6 +86,7 @@ public class DatabaseManager {
             }
             c.moveToNext();
         }
+        c.close();
         System.out.println("current data in database: " + data);
     }
 
