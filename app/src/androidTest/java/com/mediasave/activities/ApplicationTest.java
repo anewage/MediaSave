@@ -1,4 +1,4 @@
-package com.mediasave.mediasave;
+package com.mediasave.activities;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

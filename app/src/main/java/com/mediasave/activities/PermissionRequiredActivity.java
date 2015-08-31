@@ -1,40 +1,24 @@
-package com.mediasave.mediasave;
+package com.mediasave.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-import com.mediasave.InstagramAPIEndPoint.AuthenticatedUser;
-import com.mediasave.InstagramAPIEndPoint.EndPoint;
-
-public class MainActivity extends AppCompatActivity {
-
-    private EndPoint endPoint;
+public class PermissionRequiredActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        //getting the authenticated user's data from intent
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        String [] userData = extras.getStringArray(getString(R.string.authenticated_user_data));
-
-        //creating a new data structure to hold the user credentials
-        AuthenticatedUser user = new AuthenticatedUser(userData);
-        endPoint = EndPoint.getInstance();
-        endPoint.setUser(user);
-
-        loadFeed();
+        setContentView(R.layout.activity_permission_required);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_permission_required, menu);
         return true;
     }
 
@@ -53,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadFeed() {
-        //TODO
+    public void openLoginActivity(View view) {
+        Intent login = new Intent(this, LoginActivity.class);
+        startActivity(login);
+        finish();
     }
 }

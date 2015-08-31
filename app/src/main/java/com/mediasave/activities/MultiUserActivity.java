@@ -1,4 +1,4 @@
-package com.mediasave.mediasave;
+package com.mediasave.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +22,7 @@ public class MultiUserActivity extends AppCompatActivity {
         Bundle extras = intent.getExtras();
 
         //first let's get the users count
-        int usersCount = extras.getInt(getString(R.string.multi_user_count));
+        int usersCount = extras.getInt(WelcomeActivity.USER_COUNT);
         usersData = new Vector();
         for (int i = 0; i<usersCount ; i++){
             String [] data = extras.getStringArray("User" + i);

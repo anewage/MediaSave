@@ -1,4 +1,4 @@
-package com.mediasave.mediasave;
+package com.mediasave.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -9,42 +9,43 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import com.mediasave.InstagramAPIEndPoint.AuthenticatedUser;
-import com.mediasave.InstagramAPIEndPoint.EndPoint;
-import com.mediasave.sqltools.DatabaseManager;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.mediasave.databasetools.DatabaseManager;
+import com.mediasave.networking.InstagramEndPointClient;
+import com.mediasave.networking.ResponseHandler;
 
+import org.apache.http.Header;
 import org.json.JSONException;
-
-import java.io.IOException;
+import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
 
     public static final String client_side_authentication = "https://instagram.com/oauth/authorize/?client_id=CLIENT-ID&redirect_uri=REDIRECT-URI&response_type=token";
 
     private String access_token;
-    private EndPoint endPoint;
     private DatabaseManager dbManager;
+    private InstagramEndPointClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        endPoint = EndPoint.getInstance();
-        dbManager = new DatabaseManager(this);
+        dbManager = DatabaseManager.getInstance();
+        client = InstagramEndPointClient.getInstance();
 
         //making the Redirect URL ready to load
         String urlToLoad = client_side_authentication.replace("CLIENT-ID", getString(R.string.client_id));
         urlToLoad = urlToLoad.replace("REDIRECT-URI", getString(R.string.redirect_uri));
 
-        //make the webview load the URL
         WebView view = (WebView) findViewById(R.id.webView);
 
         //and now trying to get the access token!
         view.setWebViewClient(new WebViewClient() {
+
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                System.out.println("loading URL: " + url);
+            public void onPageFinished(WebView view, String url) {
+                System.out.println("page finished : " + url);
                 if (url.contains("access_token")) {
 
                     //getting the access_token out of the url
@@ -53,20 +54,32 @@ public class LoginActivity extends AppCompatActivity {
 
                     System.out.println("access_token is : " + access_token);
 
-                    //now let's load the authenticated user's feed
-                    loadFeed(access_token);
+                    //ok, let's get the basic information of user
+                    client.getUserBasicInfo(access_token, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            //and now let's save the data!
+                            String [] userData = decodeDataAndSaveThisUserInDatabase(access_token, response);
 
-                    return false;
-                }
-                else if (url.contains("error_reason")) {
+                            //start the MainActivity
+                            Intent feedIntent = new Intent(LoginActivity.this, MainActivity.class);
+                            feedIntent.putExtra(WelcomeActivity.USER_DATA, userData);
+                            startActivity(feedIntent);
+                            LoginActivity.this.finish();
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            System.out.println("failed: "+ errorResponse.toString());
+                        }
+
+                    });
+
+                } else if (url.contains("error_reason")) {
                     Intent access = new Intent(LoginActivity.this, PermissionRequiredActivity.class);
                     startActivity(access);
-                    LoginActivity.this
-                            .finish();
-                    return false;
+                    LoginActivity.this.finish();
                 }
-                else
-                    return super.shouldOverrideUrlLoading(view, url);
             }
 
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
@@ -74,6 +87,8 @@ public class LoginActivity extends AppCompatActivity {
                 System.out.println(description + " " + errorCode);
             }
         });
+
+        //make the webview load the URL
         view.loadUrl(urlToLoad);
     }
 
@@ -99,23 +114,20 @@ public class LoginActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadFeed (String access_token) {
+    private String [] decodeDataAndSaveThisUserInDatabase(String access_token, JSONObject response) {
+        String[] userData = new String[3];
         try {
-            //ok here let's first get the basic information of user
-            String [] userData = endPoint.getBasicInformationaOfUser("self", access_token);
+            //dig the data out
+            JSONObject data = response.getJSONObject("data");
+            userData[DatabaseManager.ACCESS_TOKEN_INDEX] = access_token;
+            userData[DatabaseManager.PROFILE_PIC_URL_INDEX] = data.getString("profile_picture");
+            userData[DatabaseManager.USERNAME_INDEX] = data.getString("username");
 
-            //save the user who is authenticated
+            //save the authenticated user's data
             dbManager.insertOrReplaceIntoTable(userData);
-
-            //start the MainActivity
-            Intent feedIntent = new Intent(this, MainActivity.class);
-            feedIntent.putExtra(getString(R.string.authenticated_user_data), userData);
-            startActivity(feedIntent);
-
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return userData;
     }
 }

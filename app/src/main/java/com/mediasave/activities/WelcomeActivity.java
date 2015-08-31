@@ -1,6 +1,8 @@
-package com.mediasave.mediasave;
+package com.mediasave.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,11 +10,14 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.mediasave.sqltools.DatabaseManager;
+import com.mediasave.databasetools.DatabaseManager;
 
 import java.util.Vector;
 
 public class WelcomeActivity extends AppCompatActivity {
+
+    public static final String USER_DATA = "authenticated_user_data";
+    public static final String USER_COUNT = "users_count";
 
     private DatabaseManager dbManager;
 
@@ -26,6 +31,7 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+
         //here goes my code!
         //Splash Screen
         Thread goToNextActivity = new Thread() {
@@ -37,7 +43,6 @@ public class WelcomeActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } finally {
                     //TODO go to next activity
-//                    finish();
                     init();
                 }
 
@@ -70,7 +75,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void init() {
-        dbManager = new DatabaseManager(this);
+        dbManager = DatabaseManager.getInstance();
         Vector data = dbManager.initDatabase();
         if (data.isEmpty()){
             //open up the login screen in order to get the access_token
@@ -80,39 +85,25 @@ public class WelcomeActivity extends AppCompatActivity {
         else {
             switch (data.size()){
                 case 1:
-                    //TODO
-
-                    /*
-                    Passing user's credentials to MainActivity, it should be started
-                     */
-
-                    // our app has only one authenticated user
-                    Intent feedIntent = new Intent(this, MainActivity.class);
+                    // here we have only one authenticated user
+                    Intent mainIntent = new Intent(this, MainActivity.class);
 
                     String [] userData = (String[]) data.firstElement();
-                    feedIntent.putExtra(getString(R.string.authenticated_user_data) , userData );
+                    mainIntent.putExtra(USER_DATA, userData);
 
-                    startActivity(feedIntent);
+                    startActivity(mainIntent);
 
                     break;
 
                 default:
-                    //TODO
-
-                    /*
-                    Passing the users data to MultiUserActivity, it should be started
-                     */
-
                     // multi-user
                     Intent intent = new Intent(this, MultiUserActivity.class);
 
-                    intent.putExtra(getString(R.string.multi_user_count), data.size());
+                    intent.putExtra(USER_COUNT, data.size());
                     for (int i=0 ; i<data.size(); i++) {
                         intent.putExtra("User" + i, (String[]) data.elementAt(i));
                     }
-
                     startActivity(intent);
-
                     break;
             }
         }
